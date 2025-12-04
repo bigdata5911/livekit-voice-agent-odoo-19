@@ -9,6 +9,6 @@
     <!-- Voice Chat Menu -->
     <menuitem id="menu_voice_chat" 
               name="Voice Chat" 
-              action="odoo_plugin.action_voice_chat"
+              action="voice_agent.action_voice_chat"
               sequence="100"/>
 </odoo>

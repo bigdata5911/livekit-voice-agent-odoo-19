@@ -16,8 +16,8 @@
         * AI agent (STT → LLM → TTS)
         * No storage, no transcripts, no actions
     """,
-    'author': 'Your Company',
-    'website': 'https://www.yourcompany.com',
+    'author': 'CycleSyncAI',
+    'website': 'https://cyclesyncai.com',
     'depends': ['base', 'web'],
     'data': [
         'views/menu_items.xml',
@@ -25,8 +25,8 @@
     'assets': {
         'web.assets_backend': [
             ('include', 'https://unpkg.com/livekit-client@latest/dist/livekit-client.umd.js'),
-            'odoo_plugin/static/src/js/voice_widget.js',
-            'odoo_plugin/static/src/xml/voice_widget.xml',
+            'voice_agent/static/src/js/voice_widget.js',
+            'voice_agent/static/src/xml/voice_widget.xml',
         ],
     },
     'installable': True,

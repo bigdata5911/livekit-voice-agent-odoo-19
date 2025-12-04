@@ -278,6 +278,6 @@ export class VoiceWidget extends Component {
     }
 }
 
-VoiceWidget.template = "odoo_plugin.VoiceWidget";
+VoiceWidget.template = "voice_agent.VoiceWidget";
 
 registry.category("actions").add("voice_widget", VoiceWidget);
