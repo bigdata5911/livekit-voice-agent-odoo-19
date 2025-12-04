@@ -7,6 +7,11 @@
                 <div class="header-content">
                     <i class="fa fa-comments"/>
                     <span t-esc="agentName"/>
+                    <!-- Voice Activity Indicator -->
+                    <span t-if="state.isConnected" class="voice-indicator">
+                        <i t-attf-class="fa fa-microphone {{state.isAgentSpeaking ? 'pulsing' : ''}}" 
+                           t-att-title="state.isAgentSpeaking ? 'Agent is speaking' : 'Voice active'"/>
+                    </span>
                 </div>
                 <div class="header-actions">
                     <button class="btn btn-sm btn-link" t-on-click.stop="toggleMinimize">
@@ -23,27 +28,56 @@
                     <t t-esc="state.error"/>
                 </div>
                 
-                <div class="chat-widget-status">
-                    <div t-if="state.isConnecting" class="status-connecting">
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        Connecting...
-                    </div>
-                    <div t-elif="state.isConnected" class="status-connected">
-                        <span class="badge bg-success">Connected</span>
-                        <p class="text-muted">You are connected. The AI agent is listening.</p>
-                    </div>
-                    <div t-else="" class="status-disconnected">
-                        <p class="text-muted">Click the button below to start a voice chat.</p>
+                <!-- Chat Messages Area -->
+                <div t-if="state.isConnected" class="chat-messages">
+                    <div t-foreach="state.messages" t-as="msg" t-key="msg_index" 
+                         t-att-class="'message message-' + msg.sender + (msg.streaming ? ' streaming' : '')">
+                        <div class="message-content">
+                            <div class="message-sender">
+                                <span t-esc="msg.sender === 'user' ? 'YOU' : (msg.sender === 'agent' ? 'AGENT' : 'SYSTEM')"/>
+                                <span t-if="msg.isTranscript" class="transcript-badge">
+                                    <i class="fa fa-microphone"/> Transcript
+                                </span>
+                            </div>
+                            <div class="message-text" t-esc="msg.text"/>
+                            <div t-if="msg.streaming" class="streaming-indicator">
+                                <span class="typing-dots">
+                                    <span></span><span></span><span></span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
+                <!-- Text Input Area - Always visible when connected -->
+                <div t-if="state.isConnected" class="chat-input-area">
+                    <div class="input-group">
+                        <input 
+                            type="text"
+                            class="form-control" 
+                            placeholder="Type a message"
+                            t-model="state.messageInput"
+                            t-on-keydown="onMessageInputKeydown"/>
+                        <button 
+                            class="btn btn-primary" 
+                            t-on-click="sendTextMessage"
+                            t-att-disabled="!state.messageInput.trim()">
+                            SEND
+                        </button>
+                    </div>
+                    <div class="voice-status-hint" t-if="state.isUserSpeaking">
+                        <i class="fa fa-microphone"/> You're speaking...
+                    </div>
+                </div>
+                
+                <!-- Connection Controls -->
                 <div class="chat-widget-actions">
                     <button 
                         t-if="!state.isConnected"
                         class="btn btn-primary btn-block"
                         t-on-click="connectToVoice"
                         t-att-disabled="state.isConnecting or !state.livekitLoaded">
-                        <i class="fa fa-microphone"/> Start Voice Chat
+                        <i class="fa fa-plug"/> Connect
                     </button>
                     <button 
                         t-if="state.isConnected"
