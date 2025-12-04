@@ -24,10 +24,12 @@ class VoiceController(http.Controller):
     """Minimal voice controller - only token generation"""
     
     @http.route('/voice/token', type='json', auth='user', methods=['POST'])
-    def get_token(self):
+    def get_token(self, agent_id=None):
         """
         Generate LiveKit access token for user
-        Returns: {room, token, url}
+        Args:
+            agent_id: ID of the voice agent (e.g., 'customer_support', 'accounting')
+        Returns: {room, token, url, agent_id, prompt}
         """
         try:
             # Get LiveKit credentials from environment or system parameters
@@ -41,8 +43,19 @@ class VoiceController(http.Controller):
                     'error': 'LiveKit not configured. Please set LIVEKIT_URL, LIVEKIT_API_KEY, and LIVEKIT_API_SECRET environment variables or system parameters.'
                 }
             
-            # Generate room name (simple: "voice_chat" or per-user)
-            room_name = "voice_chat"
+            # Define agent prompts
+            agent_prompts = {
+                'customer_support': 'You are a helpful customer support agent. Assist users with their questions and issues in a friendly and professional manner.',
+                'accounting': 'You are an accounting assistant. Help users with financial questions, accounting principles, and bookkeeping tasks.',
+                'general': 'You are a helpful AI assistant. Answer questions and provide assistance on various topics.',
+            }
+            
+            # Default to general if agent_id not provided or invalid
+            if not agent_id or agent_id not in agent_prompts:
+                agent_id = 'general'
+            
+            # Generate room name based on agent (per-agent rooms)
+            room_name = f"voice_chat_{agent_id}"
             
             # Get user identity - ensure it's never empty
             user = request.env.user
@@ -87,12 +100,14 @@ class VoiceController(http.Controller):
                 )) \
                 .to_jwt()
             
-            _logger.info(f"Token generated successfully using LiveKit SDK for identity: {identity}")
+            _logger.info(f"Token generated successfully using LiveKit SDK for identity: {identity}, agent: {agent_id}")
             
             return {
                 'room': room_name,
                 'token': token,
-                'url': livekit_url.rstrip('/')
+                'url': livekit_url.rstrip('/'),
+                'agent_id': agent_id,
+                'prompt': agent_prompts[agent_id]
             }
             
         except Exception as e:

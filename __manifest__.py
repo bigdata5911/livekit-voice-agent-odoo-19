@@ -25,8 +25,15 @@
     'assets': {
         'web.assets_backend': [
             ('include', 'https://unpkg.com/livekit-client@latest/dist/livekit-client.umd.js'),
-            'voice_agent/static/src/js/voice_widget.js',
-            'voice_agent/static/src/xml/voice_widget.xml',
+            # Load XML templates first so they're available when JS components load
+            'voice_agent/static/src/xml/voice_page.xml',
+            'voice_agent/static/src/xml/chat_widget.xml',
+            # Then load JS files
+            'voice_agent/static/src/js/chat_service.js',
+            'voice_agent/static/src/js/voice_page.js',
+            'voice_agent/static/src/js/chat_widget.js',
+            # Finally load CSS
+            'voice_agent/static/src/css/voice_agent.css',
         ],
     },
     'installable': True,

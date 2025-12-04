@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Client Action to open voice chat widget -->
-    <record id="action_voice_chat" model="ir.actions.client">
-        <field name="name">Voice Chat</field>
-        <field name="tag">voice_widget</field>
+    <!-- Client Action to open voice agents page -->
+    <record id="action_voice_agents" model="ir.actions.client">
+        <field name="name">Voice Agents</field>
+        <field name="tag">voice_page</field>
     </record>
     
-    <!-- Voice Chat Menu -->
-    <menuitem id="menu_voice_chat" 
-              name="Voice Chat" 
-              action="voice_agent.action_voice_chat"
+    <!-- Voice Agents Menu -->
+    <menuitem id="menu_voice_agents" 
+              name="Voice Agents" 
+              action="voice_agent.action_voice_agents"
               sequence="100"/>
 </odoo>

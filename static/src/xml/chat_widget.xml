@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="voice_agent.ChatWidget" owl="1">
+        <div class="voice-chat-widget-container" t-if="isVisible">
+            <div class="voice-chat-widget">
+            <div class="chat-widget-header" t-on-click="toggleMinimize">
+                <div class="header-content">
+                    <i class="fa fa-comments"/>
+                    <span t-esc="agentName"/>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-sm btn-link" t-on-click.stop="toggleMinimize">
+                        <i t-attf-class="fa {{isMinimized ? 'fa-window-maximize' : 'fa-window-minimize'}}"/>
+                    </button>
+                    <button class="btn btn-sm btn-link" t-on-click.stop="closeChat">
+                        <i class="fa fa-times"/>
+                    </button>
+                </div>
+            </div>
+            
+            <div t-if="!isMinimized" class="chat-widget-content">
+                <div t-if="state.error" class="alert alert-danger" role="alert">
+                    <t t-esc="state.error"/>
+                </div>
+                
+                <div class="chat-widget-status">
+                    <div t-if="state.isConnecting" class="status-connecting">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Connecting...
+                    </div>
+                    <div t-elif="state.isConnected" class="status-connected">
+                        <span class="badge bg-success">Connected</span>
+                        <p class="text-muted">You are connected. The AI agent is listening.</p>
+                    </div>
+                    <div t-else="" class="status-disconnected">
+                        <p class="text-muted">Click the button below to start a voice chat.</p>
+                    </div>
+                </div>
+                
+                <div class="chat-widget-actions">
+                    <button 
+                        t-if="!state.isConnected"
+                        class="btn btn-primary btn-block"
+                        t-on-click="connectToVoice"
+                        t-att-disabled="state.isConnecting or !state.livekitLoaded">
+                        <i class="fa fa-microphone"/> Start Voice Chat
+                    </button>
+                    <button 
+                        t-if="state.isConnected"
+                        class="btn btn-danger btn-block"
+                        t-on-click="disconnect">
+                        <i class="fa fa-stop"/> Disconnect
+                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </t>
+</templates>
+

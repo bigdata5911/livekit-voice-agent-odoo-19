@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="voice_agent.VoicePage" owl="1">
+        <div class="voice-page-container">
+            <div class="voice-page-header">
+                <h2>Voice Agents</h2>
+                <p class="text-muted">Select a voice agent to start a conversation</p>
+            </div>
+            
+            <div class="voice-agents-grid">
+                <div t-foreach="state.agents" t-as="agent" t-key="agent.id" 
+                     class="voice-agent-card" 
+                     t-on-click="() => this.selectAgent(agent)">
+                    <div class="agent-icon">
+                        <i t-attf-class="fa {{agent.icon}}"/>
+                    </div>
+                    <h4 t-esc="agent.name"/>
+                    <p class="text-muted" t-esc="agent.description"/>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
+
